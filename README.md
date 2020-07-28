@@ -31,11 +31,10 @@ python3 -m ipykernel install --user --name hpc_for_datascience_demos
 - TODO Approximate Bayesian Computation
 
 
-## Maintainer notes
+## Maintainer's notes
 
 The demos are written as plain scripts, converted into notebooks using
 [jupytext](https://github.com/mwouts/jupytext).
-
 - TODO convertion command
 - TODO hooks for flake8 and black
 - TODO pin dependencies

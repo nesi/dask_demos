@@ -29,11 +29,12 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 # Fit a simple multi-layer perceptron neural net.
 
+# TODO convergence capture warnings
 mlp = make_pipeline(RobustScaler(), MLPClassifier()).fit(X_train, y_train)
 
 y_pred = mlp.predict(X_test)
 mlp_acc = accuracy_score(y_test, y_pred)
-print(f"Baseline MLP accuracy is {mlp_acc * 100:.2f}%.")
+print(f"Baseline MLP test accuracy is {mlp_acc * 100:.2f}%.")
 
 # Tune hyper-parameters using a random search strategy.
 
@@ -44,12 +45,13 @@ params_dist = {
     "mlpclassifier__early_stopping": [True, False],
 }
 mlp_tuned = RandomizedSearchCV(mlp, params_dist, random_state=42, n_iter=10)
-mlp_tuned.fit(X_train, y_train)
+_ = mlp_tuned.fit(X_train, y_train)  # TODO convergence capture warnings
 
 y_pred_tuned = mlp_tuned.predict(X_test)
 mlp_tuned_acc = accuracy_score(y_test, y_pred_tuned)
-print(f"Tuned MLP accuracy is {mlp_tuned_acc * 100:.2f}%.")
-print(f"Best parameters found:")
+print(f"Tuned MLP test accuracy is {mlp_tuned_acc * 100:.2f}%.")
+
+print(f"Best hyper-parameters found:")
 pprint.pp(mlp_tuned.best_params_)
 
 # Start a Dask cluster (see notes in README.md about additional configuration files).
@@ -71,6 +73,7 @@ with joblib.parallel_backend("dask", wait_for_workers_timeout=600):
 
 y_pred_dask = mlp_dask.predict(X_test)
 mlp_dask_acc = accuracy_score(y_test, y_pred_dask)
-print(f"Tuned (w/ Dask) MLP accuracy is {mlp_dask_acc * 100:.2f}%.")
-print(f"Best parameters found:")
+print(f"Tuned (w/ Dask) MLP test accuracy is {mlp_dask_acc * 100:.2f}%.")
+
+print(f"Best hyper-parameters found:")
 pprint.pp(mlp_dask.best_params_)
