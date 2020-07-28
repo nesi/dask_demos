@@ -3,27 +3,33 @@
 # TODO intro
 # TODO link to other notebook for advanced stuff
 
+# +
+import pprint
+
 from scipy import stats as st
-from sklearn.datasets import fetch_openml
+from sklearn.datasets import load_breast_cancer
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.metrics import accuracy_score
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import RobustScaler
+
 import joblib
 from dask.distributed import Client
 from dask_jobqueue import SLURMCluster
 
-# Load MNIST data from [OpenML](https://www.openml.org/d/554).
+# -
 
-X, y = fetch_openml("mnist_784", version=1, return_X_y=True)
-X = X / 255.0
+# Load Breast Cancer Wisconsin dataset.
 
+X, y = load_breast_cancer(return_X_y=True)
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, stratify=y, test_size=0.33, random_state=42
+    X, y, test_size=0.33, random_state=42
 )
 
 # Fit a simple multi-layer perceptron neural net.
 
-mlp = MLPClassifier(hidden_layer_sizes=(10,)).fit(X_train, y_train)
+mlp = make_pipeline(RobustScaler(), MLPClassifier()).fit(X_train, y_train)
 
 y_pred = mlp.predict(X_test)
 mlp_acc = accuracy_score(y_test, y_pred)
@@ -32,15 +38,19 @@ print(f"Baseline MLP accuracy is {mlp_acc * 100:.2f}%.")
 # Tune hyper-parameters using a random search strategy.
 
 params_dist = {
-    "hidden_layer_sizes": [(10,), (50,), (20, 20)],
-    "alpha": st.loguniform(1e-5, 1e-2),
-    "batch_size": [100, 200, 300, 400],
-    "learning_rate_init": st.loguniform(5e-4, 5e-2),
-    "early_stopping": [True, False]
+    "mlpclassifier__hidden_layer_sizes": [(10,), (50,), (50, 50), (100,), (100, 100)],
+    "mlpclassifier__alpha": st.loguniform(1e-6, 1e-2),
+    "mlpclassifier__learning_rate_init": st.loguniform(5e-4, 5e-2),
+    "mlpclassifier__early_stopping": [True, False],
 }
-mlp_tuned = RandomizedSearchCV(
-    MLPClassifier(), params_dist, random_state=42
-)
+mlp_tuned = RandomizedSearchCV(mlp, params_dist, random_state=42, n_iter=10)
+mlp_tuned.fit(X_train, y_train)
+
+y_pred_tuned = mlp_tuned.predict(X_test)
+mlp_tuned_acc = accuracy_score(y_test, y_pred_tuned)
+print(f"Tuned MLP accuracy is {mlp_tuned_acc * 100:.2f}%.")
+print(f"Best parameters found:")
+pprint.pp(mlp_tuned.best_params_)
 
 # Start a Dask cluster (see notes in README.md about additional configuration files).
 
@@ -53,15 +63,14 @@ client = Client(cluster)
 # If we configure Joblib to use Dask as a backend, computations will be automatically
 # scheduled and distributed on nodes of the HPC.
 
-# distributed the dataset on workers
-#client.scatter(X_train, broadcast=True)
-
+mlp_dask = RandomizedSearchCV(mlp, params_dist, random_state=42, n_iter=500)
 with joblib.parallel_backend("dask", wait_for_workers_timeout=600):
-    mlp_tuned.fit(X_train, y_train)
+    mlp_dask.fit(X_train, y_train)
 
 # Enjoy an optimized model :).
 
-y_pred_tuned = mlp_tuned.predict(X_test)
-mlp_tuned_acc = accuracy_score(y_test, y_pred_tuned)
-print(f"Tuned MLP accuracy is {mlp_tuned_acc * 100:.2f}%.")
-print(f"Best parameters found {mlp_tuned.best_params_}.")
+y_pred_dask = mlp_dask.predict(X_test)
+mlp_dask_acc = accuracy_score(y_test, y_pred_dask)
+print(f"Tuned (w/ Dask) MLP accuracy is {mlp_dask_acc * 100:.2f}%.")
+print(f"Best parameters found:")
+pprint.pp(mlp_dask.best_params_)
