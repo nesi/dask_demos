@@ -1,0 +1,6 @@
+ipykernel
+black
+flake8
+jupytext
+ipykernel
+nbconvert
