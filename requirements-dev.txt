@@ -1,4 +1,3 @@
-ipykernel
 black
 flake8
 jupytext
