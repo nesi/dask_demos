@@ -49,8 +49,11 @@ it as a new kernel named `hpc_for_datascience_demos` to be used with the noteboo
 ## Maintainer's notes
 
 Demos are written as plain scripts, converted into notebooks using [jupytext](https://github.com/mwouts/jupytext).
-A [Makefile](Makefile) is provided to automate execution and conversion of the
-scripts into notebooks and static html documents.
 
-- TODO hooks for flake8 and black
-- TODO pin dependencies
+A [Makefile](Makefile) is provided to automate execution and conversion of the
+scripts into notebooks and static html documents, just run `make`.
+
+Dependencies are pinned in the [requirements-pinned.txt](requirements-pinned.txt)
+file, to keep a trace of the execution environment when generating the notebooks.
+
+- TODO pre-commit hooks using flake8 and black
