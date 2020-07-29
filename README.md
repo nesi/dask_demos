@@ -38,7 +38,8 @@ it as a new kernel named `hpc_for_datascience_demos` to be used with the noteboo
 
 ## Demos
 
-- [hyperparameters search (basic)](notebooks/hyperparameters_search_basic.ipynb)
+- The [hyperparameters search (basic)](notebooks/hyperparameters_search_basic.ipynb)
+  notebook shows how to adapt a Scikit-Learn grid search to run in parallel on HPC,
 - TODO hyperparameters search (advanced)
 - TODO interactive visualization (intro)
 - TODO interactive visualization (advanced)
@@ -54,6 +55,6 @@ A [Makefile](Makefile) is provided to automate execution and conversion of the
 scripts into notebooks and static html documents, just run `make`.
 
 Dependencies are pinned in the [requirements-pinned.txt](requirements-pinned.txt)
-file, to keep a trace of the execution environment when generating the notebooks.
+file to keep a trace of the execution environment when generating the notebooks.
 
 - TODO pre-commit hooks using flake8 and black

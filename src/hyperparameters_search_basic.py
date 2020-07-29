@@ -1,6 +1,13 @@
 # # Hyper-parameters tuning on HPC (basic)
 #
-# TODO intro
+# This demo illustrates one simple way to adapt a grid search strategy for
+# hyper-parameters tuning to use HPC for the many parallel computations involved.
+#
+# In this example, I will rely on [Dask](https://dask.org) to do the heavy lifting,
+# distributing the parallel operations on SLURM jobs. We'll see how it can be used
+# as a backend for [Scikit-Learn](https://scikit-learn.org) estimators, with very
+# little changes compared to a vanilla grid search.
+#
 # TODO link to other notebook for advanced stuff
 
 # +
@@ -74,3 +81,5 @@ mlp_tuned_acc = accuracy_score(y_test, y_pred_tuned)
 print(f"Tuned MLP test accuracy is {mlp_tuned_acc * 100:.2f}%.")
 
 print(f"Best hyper-parameters: {mlp_tuned.best_params_}")
+
+# TODO notes about what could go wrong (memory consumption)
