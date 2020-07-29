@@ -32,7 +32,7 @@ X, y = fetch_openml("mnist_784", version=1, return_X_y=True)
 X = X / 255.0
 
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, stratify=y, train_size=10000, test_size=10000, random_state=42
+    X, y, stratify=y, train_size=5000, test_size=10000, random_state=42
 )
 
 # Fit a simple multi-layer perceptron neural net.
