@@ -3,17 +3,17 @@ KERNEL := hpc_for_datascience_demos
 NOTEBOOKS := notebooks/hyperparameters_search_basic.ipynb
 HTML_FILES := $(NOTEBOOKS:.ipynb=.html)
 
-all: $(NOTEBOOKS) $(HTML_FILES) requirements-pinned.txt
+all: $(NOTEBOOKS) $(HTML_FILES)
 
 notebooks/%.html: notebooks/%.ipynb
 	. venv/bin/activate; jupyter nbconvert --to html "$<"
 
-notebooks/%.ipynb: src/%.py
+notebooks/%.ipynb: src/%.py requirements-pinned.txt
 	mkdir -p notebooks
 	. venv/bin/activate; jupytext --to notebook --execute --set-kernel $(KERNEL) "$<"
 	mv "src/$(@F)" "$@"
 
-requirements-pinned.txt: venv/bin/activate $(NOTEBOOKS)
+requirements-pinned.txt: venv/bin/activate
 	venv/bin/pip freeze > "$@"
 
 venv/bin/activate: requirements.txt requirements-dev.txt
