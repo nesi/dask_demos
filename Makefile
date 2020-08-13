@@ -1,4 +1,5 @@
 KERNEL := hpc_for_datascience_demos
+KERNEL_DIR = $(HOME)/.local/share/jupyter/kernels/$(KERNEL)
 
 NOTEBOOKS := notebooks/hyperparameters_search_basic.ipynb
 HTML_FILES := $(NOTEBOOKS:.ipynb=.html)
@@ -22,6 +23,7 @@ venv/.canary: requirements.txt requirements-dev.txt
 	venv/bin/pip install -r requirements.txt
 	venv/bin/pip install -r requirements-dev.txt
 	venv/bin/python3 -m ipykernel install --user --name $(KERNEL)
+	sed -i 's|"argv": \[|"argv": \[\n  "$(PWD)/src/kernel_wrapper.bash",|' $(KERNEL_DIR)/kernel.json
 	touch "$@"
 
 venv: venv/.canary

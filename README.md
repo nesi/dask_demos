@@ -8,7 +8,7 @@ related tasks on NeSI's HPC platform.
 
 First, to be able to run the notebooks, you will need to have access to
 JupyterLab on the HPC plateform, either using the dedicated [JupyterLab module](https://support.nesi.org.nz/hc/en-gb/articles/360001093315-JupyterLab)
-or logging in via JupyterHub (TODO link to guide).
+or logging in via [Jupyter on NeSI](https://support.nesi.org.nz/hc/en-gb/articles/360001555615-Jupyter-on-NeSI).
 
 Once you are connected to a JupyterLab instance, open a new terminal, via the
 Launcher or the File menu.
@@ -18,20 +18,20 @@ Then clone this repository:
 git clone https://github.com/nesi/hpc_for_datascience_demos
 ```
 
-And install all dependencies, either in your home space:
-```
-cd hpc_for_datascience_demos
-pip install --user requirements.txt
-```
-
-Or create a virtual environment to cleanly isolate this project from others:
+And install all dependencies in a virtual environment to cleanly isolate this
+project from others:
 ```
 cd hpc_for_datascience_demos
 make venv
 ```
-This command will create a virtual environment in the `venv` folder and register
-it as a new kernel named `hpc_for_datascience_demos` to be used with the notebooks.
+The last command will create a virtual environment in the `venv` folder,
+register it as a new kernel named `hpc_for_datascience_demos` and ensure that
+it uses the right [environment modules](https://support.nesi.org.nz/hc/en-gb/articles/360001113076-The-HPC-environment-).
 
+Make sure to select the `hpc_for_datascience_demos` kernel when running the
+provided notebooks.
+
+- TODO explain manual install?
 - TODO labextensions (dask, proxy-server, pyviz), should be already installed
 - TODO dask configuration (log folder, worker folder)
 
