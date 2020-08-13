@@ -13,14 +13,15 @@ notebooks/%.ipynb: src/%.py requirements-pinned.txt
 	. venv/bin/activate; jupytext --to notebook --execute --set-kernel $(KERNEL) "$<"
 	mv "src/$(@F)" "$@"
 
-requirements-pinned.txt: venv/bin/.canary
+requirements-pinned.txt: venv/.canary
 	venv/bin/pip freeze > "$@"
 
 venv/.canary: requirements.txt requirements-dev.txt
 	python3 -m venv venv
+	venv/bin/pip install -U pip
 	venv/bin/pip install -r requirements.txt
 	venv/bin/pip install -r requirements-dev.txt
-	venv/bin/activate/python3 -m ipykernel install --user --name $(KERNEL)
+	venv/bin/python3 -m ipykernel install --user --name $(KERNEL)
 	touch "$@"
 
 venv: venv/.canary
