@@ -3,12 +3,10 @@
 # This demo illustrates one simple way to adapt a grid search strategy for
 # hyper-parameters tuning to use HPC for the many parallel computations involved.
 #
-# In this example, I will rely on [Dask](https://dask.org) to do the heavy lifting,
+# In this example, we will rely on [Dask](https://dask.org) to do the heavy lifting,
 # distributing the parallel operations on SLURM jobs. We'll see how it can be used
 # as a backend for [Scikit-Learn](https://scikit-learn.org) estimators, with very
 # little changes compared to a vanilla grid search.
-#
-# TODO link to other notebook for advanced stuff
 
 # +
 import time
@@ -86,12 +84,10 @@ cluster = SLURMCluster(
     local_directory="../dask",  # folder for workers data
 )
 
-# Spawn 10 workers and connect a client to be able use them.
+# Spawn 20 workers and connect a client to be able use them.
 
-cluster.scale(n=10)
+cluster.scale(n=20)
 client = Client(cluster)
-
-# TODO link to the dashboard? mention labextension?
 
 # Scikit-learn uses [Joblib](https://joblib.readthedocs.io) to parallelize
 # computations of many operations, including the randomized search on hyper-parameters.
@@ -104,7 +100,10 @@ with joblib.parallel_backend("dask", wait_for_workers_timeout=600):
     elapsed = time.perf_counter() - start
 
 n_jobs = len(mlp_tuned.cv_results_["params"]) * mlp_tuned.n_splits_
-print(f"Model fitting took {elapsed:0.2f}s ({elapsed / n_jobs:0.2f}s per model fit).")
+print(
+    f"Model fitting took {elapsed:0.2f}s (equivalent to {elapsed / n_jobs:0.2f}s "
+    "per model fit on a single node)."
+)
 
 # Enjoy an optimized model :).
 
@@ -113,6 +112,3 @@ mlp_tuned_acc = accuracy_score(y_test, y_pred_tuned)
 print(f"Tuned MLP test accuracy is {mlp_tuned_acc * 100:.2f}%.")
 
 print(f"Best hyper-parameters: {mlp_tuned.best_params_}")
-
-# TODO notes about what could go wrong (memory consumption)
-# TODO notes about dashboard access and cluster widget?

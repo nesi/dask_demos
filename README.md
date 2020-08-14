@@ -28,9 +28,6 @@ The last command will create a virtual environment in the `venv` folder,
 register it as a new kernel named `hpc_for_datascience_demos` and ensure that
 it uses the right [environment modules](https://support.nesi.org.nz/hc/en-gb/articles/360001113076-The-HPC-environment-).
 
-- TODO explain manual install?
-- TODO labextensions (dask, proxy-server, pyviz), should be already installed
-
 
 ## Demos
 
@@ -38,12 +35,7 @@ Make sure to select the `hpc_for_datascience_demos` kernel when running any of
 the provided notebooks.
 
 - The [hyperparameters search (basic)](notebooks/hyperparameters_search_basic.ipynb)
-  notebook shows how to adapt a Scikit-Learn grid search to run in parallel on HPC
-- TODO hyperparameters search (advanced)
-- TODO interactive visualization (intro)
-- TODO interactive visualization (advanced)
-- TODO deep-learning multi-gpu training
-- TODO Approximate Bayesian Computation
+  notebook shows how to adapt a Scikit-Learn grid search to run in parallel on HPC.
 
 
 ## Maintainer's notes
@@ -56,5 +48,3 @@ scripts into notebooks and static html documents, just run `make`. Use the
 
 Dependencies are pinned in the [requirements-pinned.txt](requirements-pinned.txt)
 file to keep a trace of the execution environment when generating the notebooks.
-
-- TODO pre-commit hooks using flake8 and black
