@@ -11,7 +11,6 @@
 # TODO link to other notebook for advanced stuff
 
 # +
-import pprint
 import time
 
 import numpy as np
@@ -21,6 +20,7 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import accuracy_score
 
 import joblib
+import dask
 from dask.distributed import Client
 from dask_jobqueue import SLURMCluster
 
@@ -55,11 +55,43 @@ param_grid = {
 }
 mlp_tuned = GridSearchCV(MLPClassifier(), param_grid, verbose=1)
 
-# Start a Dask cluster (see notes in README.md about additional configuration files).
+# Start a Dask cluster using SLURM jobs as workers.
+#
+# There are a couple of things we need to configure here:
+#
+# - disabling the mechanism to write on disk when workers run out of memory,
+# - memory, CPUs, maximum time and number of workers per SLURM job,
+# - dask folders for log files and workers data.
+#
+# We recommend putting the log folder and workers data folders in your
+# `/nesi/nobackup/<project_code>` folder, most indicated for temporary files
+# (see [NeSI File Systems and Quotas](https://support.nesi.org.nz/hc/en-gb/articles/360000177256-NeSI-File-Systems-and-Quotas)).
+#
+# All of these options can be set in configuration files, see [Dask configuration](https://docs.dask.org/en/latest/configuration.html)
+# and [Dask jobqueue configuration](https://jobqueue.dask.org/en/latest/configuration-setup.html)
+# for more information.
 
-cluster = SLURMCluster(cores=10, processes=2, memory="8GiB", walltime="0-00:30")
+dask.config.set(
+    {
+        "distributed.worker.memory.target": False,  # avoid spilling to disk
+        "distributed.worker.memory.spill": False,  # avoid spilling to disk
+    }
+)
+cluster = SLURMCluster(
+    cores=10,
+    processes=2,
+    memory="8GiB",
+    walltime="0-00:30",
+    log_directory="../dask/logs",  # folder for SLURM logs for each worker
+    local_directory="../dask",  # folder for workers data
+)
+
+# Spawn 10 workers and connect a client to be able use them.
+
 cluster.scale(n=10)
 client = Client(cluster)
+
+# TODO link to the dashboard? mention labextension?
 
 # Scikit-learn uses [Joblib](https://joblib.readthedocs.io) to parallelize
 # computations of many operations, including the randomized search on hyper-parameters.
@@ -83,3 +115,4 @@ print(f"Tuned MLP test accuracy is {mlp_tuned_acc * 100:.2f}%.")
 print(f"Best hyper-parameters: {mlp_tuned.best_params_}")
 
 # TODO notes about what could go wrong (memory consumption)
+# TODO notes about dashboard access and cluster widget?

@@ -30,7 +30,6 @@ it uses the right [environment modules](https://support.nesi.org.nz/hc/en-gb/art
 
 - TODO explain manual install?
 - TODO labextensions (dask, proxy-server, pyviz), should be already installed
-- TODO dask configuration (log folder, worker folder)
 
 
 ## Demos
