@@ -35,7 +35,7 @@ venv/.canary: requirements.txt requirements-dev.txt
 	venv/bin/pip install -r requirements.txt
 	venv/bin/pip install -r requirements-dev.txt
 	venv/bin/python3 -m ipykernel install --user --name $(KERNEL)
-    # use a wrapper script to load required modules before starting the kernel
+	# use a wrapper script to load required modules before starting the kernel
 	sed -i 's|"argv": \[|"argv": \[\n  "$(PWD)/src/kernel_wrapper.bash",|' \
 	    $(KERNEL_DIR)/kernel.json
 	touch "$@"
