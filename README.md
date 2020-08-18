@@ -7,7 +7,7 @@ related tasks on NeSI's HPC platform.
 ## Installation
 
 First, to be able to run the notebooks, you will need to have access to
-JupyterLab on the HPC plateform, either using the dedicated [JupyterLab module](https://support.nesi.org.nz/hc/en-gb/articles/360001093315-JupyterLab)
+JupyterLab on the HPC platform, either using the dedicated [JupyterLab module](https://support.nesi.org.nz/hc/en-gb/articles/360001093315-JupyterLab)
 or logging in via [Jupyter on NeSI](https://support.nesi.org.nz/hc/en-gb/articles/360001555615-Jupyter-on-NeSI).
 
 Once you are connected to a JupyterLab instance, open a new terminal, via the
