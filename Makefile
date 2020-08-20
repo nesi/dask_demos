@@ -10,7 +10,7 @@ help:
 	@echo 'Available targets:'
 	@echo ''
 	@echo '	help	Display this help message'
-	@echo '	venv	Create a Python virtual environment and it to jupyter kernels'
+	@echo '	venv	Create a Python virtual environment and register it to jupyter kernels'
 	@echo '	all	Run all scripts and convert them into notebooks and .html files'
 	@echo ''
 
