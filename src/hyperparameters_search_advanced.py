@@ -14,20 +14,20 @@ import time
 
 import numpy as np
 from sklearn.datasets import fetch_openml
-from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from sklearn.metrics import accuracy_score
 
 import torch
-from torch import nn
-import torch.nn.functional as F
 from skorch import NeuralNetClassifier
+from src.torch_models import SimpleMLP
 
 import joblib
 import dask
 from dask.distributed import Client
 from dask_jobqueue import SLURMCluster
+from dask_ml.preprocessing import MinMaxScaler
+from dask_ml.model_selection import GridSearchCV
 
 # -
 
@@ -74,23 +74,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 # https://skorch.readthedocs.io/en/stable/user/quickstart.html
 # https://github.com/skorch-dev/skorch/blob/master/notebooks/MNIST.ipynb
 # https://github.com/skorch-dev/skorch/blob/master/notebooks/Basic_Usage.ipynb
-
-
-class SimpleMLP(nn.Module):
-    def __init__(self, input_dim, hidden_dim, output_dim, dropout):
-        super().__init__()
-        self.dense0 = nn.Linear(input_dim, hidden_dim)
-        self.dropout = nn.Dropout(dropout)
-        self.dense1 = nn.Linear(hidden_dim, hidden_dim)
-        self.output = nn.Linear(hidden_dim, output_dim)
-
-    def forward(self, X, **kwargs):
-        X = F.relu(self.dense0(X))
-        X = self.dropout(X)
-        X = F.relu(self.dense1(X))
-        X = F.softmax(self.output(X), dim=-1)
-        return X
-
+# TODO use log_softmax?
 
 torch.manual_seed(0)
 net = NeuralNetClassifier(
@@ -117,15 +101,14 @@ print(f"Simple MLP test accuracy is {mlp_acc * 100:.2f}%.")
 param_grid = {
     "neuralnetclassifier__module__hidden_dim": [50, 100, 200],
     "neuralnetclassifier__module__dropout": [0.2, 0.5, 0.8],
-    # add learning rate
+    # add learning rate (ADAM!?)
 }
 mlp.set_params(neuralnetclassifier__verbose=0)
-mlp_tuned = GridSearchCV(mlp, param_grid, verbose=1)
+mlp_tuned = GridSearchCV(mlp, param_grid)
 
-with joblib.parallel_backend("dask", wait_for_workers_timeout=600):
-    start = time.perf_counter()
-    mlp_tuned.fit(X_train, y_train)
-    elapsed = time.perf_counter() - start
+start = time.perf_counter()
+mlp_tuned.fit(X_train, y_train)
+elapsed = time.perf_counter() - start
 
 n_jobs = len(mlp_tuned.cv_results_["params"]) * mlp_tuned.n_splits_
 print(
@@ -133,16 +116,10 @@ print(
     "per model fit on a single node)."
 )
 
-from dask_ml.preprocessing import MinMaxScaler
-from dask_ml.model_selection import GridSearchCV
+# TODO use dask array and lower memory on workers?
 import dask.array as da
 
-X_train2 = da.array(X_train).rechunk({0: 500})
-
-start = time.perf_counter()
-mlp_tuned.fit(X_train2, y_train)
-elapsed = time.perf_counter() - start
-
+X_train = da.array(X_train).rechunk({0: 500})
 
 # TODO dask-ml hyperband
 # https://ml.dask.org/hyper-parameter-search.html
