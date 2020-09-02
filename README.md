@@ -22,7 +22,9 @@ And install all dependencies in a virtual environment to cleanly isolate this
 project from others:
 ```
 cd hpc_for_datascience_demos
-make venv
+module purge
+module load Miniconda3/4.8.2
+make venv_nesi
 ```
 The last command will create a virtual environment in the `venv` folder,
 register it as a new kernel named `hpc_for_datascience_demos` and ensure that
@@ -38,13 +40,8 @@ the provided notebooks.
   notebook shows how to adapt a Scikit-Learn grid search to run in parallel on HPC.
 
 
-## Maintainer's notes
+## Development
 
-Demos are written as plain scripts, converted into notebooks using [jupytext](https://github.com/mwouts/jupytext).
-
-A [Makefile](Makefile) is provided to automate execution and conversion of the
-scripts into notebooks and static html documents, just run `make`. Use the 
-`make help` command to list available targets.
-
-Dependencies are pinned in the [requirements-pinned.txt](requirements-pinned.txt)
-file to keep a trace of the execution environment when generating the notebooks.
+To ease maintenance, the notebooks are first written as regular script and then
+converted using [jupytext](https://github.com/mwouts/jupytext). The makefile
+contains a `notebooks` target to render them.
