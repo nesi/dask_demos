@@ -83,11 +83,11 @@ cluster = SLURMCluster(
     log_directory="../dask/logs",  # folder for SLURM logs for each worker
     local_directory="../dask",  # folder for workers data
 )
+client = Client(cluster)
 
 # Spawn 20 workers and connect a client to be able use them.
 
 cluster.scale(n=20)
-client = Client(cluster)
 
 # Scikit-learn uses [Joblib](https://joblib.readthedocs.io) to parallelize
 # computations of many operations, including the randomized search on hyper-parameters.
