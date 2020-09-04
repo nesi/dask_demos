@@ -94,8 +94,9 @@ cluster.scale(n=20)
 # If we configure Joblib to use Dask as a backend, computations will be automatically
 # scheduled and distributed on nodes of the HPC.
 
-# TODO use scatter to scale data size!
-with joblib.parallel_backend("dask", wait_for_workers_timeout=600):
+with joblib.parallel_backend(
+    "dask", wait_for_workers_timeout=600, scatter=[X_train, y_train]
+):
     start = time.perf_counter()
     mlp_tuned.fit(X_train, y_train)
     elapsed = time.perf_counter() - start
