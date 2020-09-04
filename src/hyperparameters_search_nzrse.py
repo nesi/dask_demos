@@ -11,6 +11,7 @@
 # +
 import time
 import json
+import warnings
 
 import numpy as np
 import scipy.stats as st
@@ -26,7 +27,7 @@ from dask_jobqueue import SLURMCluster
 from dask_ml.model_selection import HyperbandSearchCV
 
 import torch
-from skorch import NeuralNetClassifier
+import skorch
 from src.torch_models import SimpleCNN
 
 # -
@@ -99,15 +100,14 @@ client = Client(cluster)
 # Spawn 20 workers and connect a client to be able use them.
 
 cluster.scale(n=20)
+client.wait_for_workers(1)
 
 # Scikit-learn uses [Joblib](https://joblib.readthedocs.io) to parallelize
 # computations of many operations, including the randomized search on hyper-parameters.
 # If we configure Joblib to use Dask as a backend, computations will be automatically
 # scheduled and distributed on nodes of the HPC.
 
-with joblib.parallel_backend(
-    "dask", wait_for_workers_timeout=120, scatter=[X_train, y_train]
-):
+with joblib.parallel_backend("dask", scatter=[X_train, y_train]):
     start = time.perf_counter()
     mlp_tuned.fit(X_train, y_train)
     elapsed = time.perf_counter() - start
@@ -167,15 +167,14 @@ cluster = SLURMCluster(
 client = Client(cluster)
 
 cluster.adapt(minimum=1, maximum=4)
+client.wait_for_workers(1)
 
 # TODO Skorch
-
-X_train_future = client.scatter(X_train.astype(np.float32))
 
 
 def build_model(device):
     torch.manual_seed(0)
-    return NeuralNetClassifier(
+    return skorch.NeuralNetClassifier(
         module=SimpleCNN,
         module__input_dims=(28, 28),
         module__output_dim=len(np.unique(y)),
@@ -187,6 +186,9 @@ def build_model(device):
         device=device,
     )
 
+
+X_train_future = client.scatter(X_train.astype(np.float32))
+X_train_future
 
 mlp_torch = build_model("cpu")
 
