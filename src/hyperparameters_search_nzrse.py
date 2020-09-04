@@ -9,7 +9,6 @@
 # little changes compared to a vanilla grid search.
 
 # +
-import time
 import json
 import warnings
 
@@ -44,10 +43,8 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 # Fit a simple multi-layer perceptron neural net.
 
-start = time.perf_counter()
+# %%time
 mlp = MLPClassifier(random_state=42).fit(X_train, y_train)
-elapsed = time.perf_counter() - start
-print(f"Model fitting took {elapsed:0.2f}s.")
 
 y_pred = mlp.predict(X_test)
 mlp_acc = accuracy_score(y_test, y_pred)
@@ -107,16 +104,9 @@ client.wait_for_workers(1)
 # If we configure Joblib to use Dask as a backend, computations will be automatically
 # scheduled and distributed on nodes of the HPC.
 
+# %%time
 with joblib.parallel_backend("dask", scatter=[X_train, y_train]):
-    start = time.perf_counter()
     mlp_tuned.fit(X_train, y_train)
-    elapsed = time.perf_counter() - start
-
-n_jobs = len(mlp_tuned.cv_results_["params"]) * mlp_tuned.n_splits_
-print(
-    f"Model fitting took {elapsed:0.2f}s (equivalent to {elapsed / n_jobs:0.2f}s "
-    "per model fit on a single node)."
-)
 
 # Enjoy an optimized model :).
 
@@ -136,12 +126,8 @@ mlp_hyper = HyperbandSearchCV(
     random_state=42,
 )
 
-start = time.perf_counter()
+# %%time
 mlp_hyper.fit(X_train, y_train, classes=np.unique(y))
-elapsed = time.perf_counter() - start
-print(f"Model fitting took {elapsed:0.2f}s.")
-
-# TODO add timing vs. number of models
 
 y_pred_hyper = mlp_hyper.predict(X_test)
 mlp_hyper_acc = accuracy_score(y_test, y_pred_hyper)
@@ -192,21 +178,17 @@ X_train_future
 
 mlp_torch = build_model("cpu")
 
-start = time.perf_counter()
+# %%time
 mlp_torch_future = client.submit(mlp_torch.fit, X_train_future, y_train)
 mlp_torch = mlp_torch_future.result()
-elapsed = time.perf_counter() - start
-print(f"PyTorch model fitting took {elapsed:0.2f}s on CPU.")
 
 mlp_torch = build_model("cuda")
 
-start = time.perf_counter()
+# %%time
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     mlp_torch_future = client.submit(mlp_torch.fit, X_train_future, y_train)
     mlp_torch = mlp_torch_future.result()
-elapsed = time.perf_counter() - start
-print(f"PyTorch model fitting took {elapsed:0.2f}s on GPU.")
 
 param_space = {
     "module__n_chans": st.randint(10, 64),
@@ -218,12 +200,10 @@ mlp_torch = HyperbandSearchCV(
     build_model("cuda"), param_space, max_iter=20, random_state=42
 )
 
-start = time.perf_counter()
+# %%time
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     mlp_torch.fit(X_train.astype(np.float32), y_train)
-elapsed = time.perf_counter() - start
-print(f"Model fitting took {elapsed:0.2f}s.")
 
 y_pred_torch = mlp_torch.predict(X_test.astype(np.float32))
 mlp_torch_acc = accuracy_score(y_test, y_pred_torch)
