@@ -10,6 +10,7 @@
 
 # +
 import time
+import json
 
 import numpy as np
 import scipy.stats as st
@@ -26,7 +27,7 @@ from dask_ml.model_selection import HyperbandSearchCV
 
 import torch
 from skorch import NeuralNetClassifier
-from src.torch_models import SimpleMLP
+from src.torch_models import SimpleCNN
 
 # -
 
@@ -91,6 +92,7 @@ cluster = SLURMCluster(
     walltime="0-00:30",
     log_directory="../dask/logs",  # folder for SLURM logs for each worker
     local_directory="../dask",  # folder for workers data
+    queue="bigmem",
 )
 client = Client(cluster)
 
@@ -104,7 +106,7 @@ cluster.scale(n=20)
 # scheduled and distributed on nodes of the HPC.
 
 with joblib.parallel_backend(
-    "dask", wait_for_workers_timeout=600, scatter=[X_train, y_train]
+    "dask", wait_for_workers_timeout=120, scatter=[X_train, y_train]
 ):
     start = time.perf_counter()
     mlp_tuned.fit(X_train, y_train)
@@ -122,9 +124,10 @@ y_pred_tuned = mlp_tuned.predict(X_test)
 mlp_tuned_acc = accuracy_score(y_test, y_pred_tuned)
 print(f"Tuned MLP test accuracy is {mlp_tuned_acc * 100:.2f}%.")
 
-print(f"Best hyper-parameters: {mlp_tuned.best_params_}")
+print(f"Best hyper-parameters:\n{json.dumps(mlp_tuned.best_params_, indent=4)}")
 
 # TODO Dask ML - hyperband
+
 mlp_hyper = HyperbandSearchCV(
     MLPClassifier(random_state=42),
     param_space,
@@ -142,7 +145,9 @@ print(f"Model fitting took {elapsed:0.2f}s.")
 
 y_pred_hyper = mlp_hyper.predict(X_test)
 mlp_hyper_acc = accuracy_score(y_test, y_pred_hyper)
-print(f"MLP (hyperband) test accuracy is {mlp_hyper_acc * 100:.2f}%.")
+print(f"MLP (Hyperband) test accuracy is {mlp_hyper_acc * 100:.2f}%.")
+
+print(f"Best hyper-parameters:\n{json.dumps(mlp_hyper.best_params_, indent=4)}")
 
 # TODO GPU cluster
 
@@ -165,31 +170,61 @@ cluster.adapt(minimum=1, maximum=4)
 
 # TODO Skorch
 
-torch.manual_seed(0)
-mlp_torch = NeuralNetClassifier(
-    module=SimpleMLP,
-    module__input_dim=X.shape[1],
-    module__output_dim=len(np.unique(y)),
-    optimizer=torch.optim.Adam,
-    device="cuda",
-)
+X_train_future = client.scatter(X_train.astype(np.float32))
+
+
+def build_model(device):
+    torch.manual_seed(0)
+    return NeuralNetClassifier(
+        module=SimpleCNN,
+        module__input_dims=(28, 28),
+        module__output_dim=len(np.unique(y)),
+        module__n_chans=32,
+        module__hidden_dim=100,
+        module__dropout=0.5,
+        optimizer=torch.optim.Adam,
+        optimizer__lr=1e-3,
+        device=device,
+    )
+
+
+mlp_torch = build_model("cpu")
+
+start = time.perf_counter()
+mlp_torch_future = client.submit(mlp_torch.fit, X_train_future, y_train)
+mlp_torch = mlp_torch_future.result()
+elapsed = time.perf_counter() - start
+print(f"PyTorch model fitting took {elapsed:0.2f}s on CPU.")
+
+mlp_torch = build_model("cuda")
+
+start = time.perf_counter()
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
+    mlp_torch_future = client.submit(mlp_torch.fit, X_train_future, y_train)
+    mlp_torch = mlp_torch_future.result()
+elapsed = time.perf_counter() - start
+print(f"PyTorch model fitting took {elapsed:0.2f}s on GPU.")
 
 param_space = {
+    "module__n_chans": st.randint(10, 64),
     "module__hidden_dim": st.randint(50, 200),
     "module__dropout": st.uniform(),
     "optimizer__lr": st.loguniform(1e-4, 1e-1),
 }
-mlp_torch_hyper = HyperbandSearchCV(
-    mlp_torch, param_space, max_iter=200, aggressiveness=4, random_state=42
+mlp_torch = HyperbandSearchCV(
+    build_model("cuda"), param_space, max_iter=20, random_state=42
 )
 
 start = time.perf_counter()
-mlp_torch_hyper.fit(X_train.astype(np.float32), y_train)
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
+    mlp_torch.fit(X_train.astype(np.float32), y_train)
 elapsed = time.perf_counter() - start
 print(f"Model fitting took {elapsed:0.2f}s.")
 
-y_pred_torch = mlp_torch_hyper.predict(X_test.astype(np.float32))
+y_pred_torch = mlp_torch.predict(X_test.astype(np.float32))
 mlp_torch_acc = accuracy_score(y_test, y_pred_torch)
-print(f"MLP (PyTorch) test accuracy is {mlp_torch_acc * 100:.2f}%.")
+print(f"CNN (PyTorch) test accuracy is {mlp_torch_acc * 100:.2f}%.")
 
-# TODO nevergrad?
+print(f"Best hyper-parameters:\n{json.dumps(mlp_torch.best_params_, indent=4)}")
