@@ -28,6 +28,7 @@ from dask.distributed import Client
 from dask_jobqueue import SLURMCluster
 from dask_ml.preprocessing import MinMaxScaler
 from dask_ml.model_selection import GridSearchCV
+import dask.array as da
 
 # -
 
@@ -46,6 +47,7 @@ cluster = SLURMCluster(
     walltime="0-00:30",
     log_directory="../dask/logs",  # folder for SLURM logs for each worker
     local_directory="../dask",  # folder for workers data
+    queue="hugemem",  # TODO remove
 )
 cluster.scale(n=20)
 client = Client(cluster)
@@ -83,6 +85,8 @@ net = NeuralNetClassifier(
     module__output_dim=len(np.unique(y)),
     module__hidden_dim=50,
     module__dropout=0.5,
+    optimizer=torch.optim.Adam,
+    optimizer__lr=1e-3,
 )
 mlp = make_pipeline(MinMaxScaler(), net)
 _ = mlp.fit(X_train, y_train)
@@ -101,10 +105,12 @@ print(f"Simple MLP test accuracy is {mlp_acc * 100:.2f}%.")
 param_grid = {
     "neuralnetclassifier__module__hidden_dim": [50, 100, 200],
     "neuralnetclassifier__module__dropout": [0.2, 0.5, 0.8],
-    # add learning rate (ADAM!?)
+    "neuralnetclassifier__optimizer__lr": [1e-2, 1e-3, 1e-4],
 }
 mlp.set_params(neuralnetclassifier__verbose=0)
 mlp_tuned = GridSearchCV(mlp, param_grid)
+
+# X_train = da.array(X_train).rechunk({0: 500})
 
 start = time.perf_counter()
 mlp_tuned.fit(X_train, y_train)
@@ -116,10 +122,11 @@ print(
     "per model fit on a single node)."
 )
 
-# TODO use dask array and lower memory on workers?
-import dask.array as da
+y_pred_tuned = mlp_tuned.predict(X_test)
+mlp_tuned_acc = accuracy_score(y_test, y_pred_tuned)
+print(f"Tuned MLP test accuracy is {mlp_tuned_acc * 100:.2f}%.")
 
-X_train = da.array(X_train).rechunk({0: 500})
+print(f"Best hyper-parameters: {mlp_tuned.best_params_}")
 
 # TODO dask-ml hyperband
 # https://ml.dask.org/hyper-parameter-search.html
