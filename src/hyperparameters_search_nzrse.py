@@ -13,6 +13,7 @@ import warnings
 
 import numpy as np
 import scipy.stats as st
+import matplotlib.pyplot as plt
 from sklearn.datasets import fetch_openml
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
@@ -36,10 +37,15 @@ X, y = fetch_openml("mnist_784", version=1, return_X_y=True)
 X = X / 255.0
 y = y.astype(int)
 
-# TODO display sample
+# This dataset contains images of digits. Here is a sample.
 
-# To keep the example fast, let's use only a subset of the whole data set as
-# train and test sets.
+_, axes = plt.subplots(1, 10, figsize=(12, 5))
+for ax, digit in zip(axes, X):
+    ax.imshow(digit.reshape(28, 28))
+    ax.axis("off")
+
+# To keep this example code quick, let's use only a subset of the whole data set
+# as train and test sets.
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, stratify=y, train_size=5000, test_size=10000, random_state=42
