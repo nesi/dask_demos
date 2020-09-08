@@ -38,6 +38,8 @@ the provided notebooks.
 
 - The [hyperparameters search (basic)](notebooks/hyperparameters_search_basic.ipynb)
   notebook shows how to adapt a Scikit-Learn grid search to run in parallel on HPC.
+- The [hyperparameters search (NZ RSE 2020)](notebooks/hyperparameters_search_nzrse.ipynb)
+  notebook corresponds to the demo presented at [NZ RSE conference 2020](https://www.rseconference.nz/).
 
 
 ## Development
