@@ -2,7 +2,7 @@ PYTHON_VERSION ?= 3.8
 CONDA_VENV_PATH ?= $(PWD)/venv
 KERNEL_NAME ?= $(shell basename $(CURDIR))
 
-NOTEBOOKS := notebooks/hyperparameters_search_basic.ipynb
+NOTEBOOKS := notebooks/hyperparameters_search_basic.ipynb notebooks/hyperparameters_search_nzrse.ipynb
 HTML_FILES := $(NOTEBOOKS:.ipynb=.html)
 
 CONDA_BASE := $(shell conda info --base)

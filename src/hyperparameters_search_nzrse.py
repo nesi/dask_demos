@@ -100,6 +100,8 @@ cluster = SLURMCluster(
 )
 client = Client(cluster)
 
+client
+
 # Spawn 20 workers and connect a client to be able use them.
 
 cluster.scale(n=20)
@@ -179,52 +181,18 @@ client.wait_for_workers(1)
 # to make it in a Scikit-learn compatible estimator.
 
 
-def build_model(device):
-    torch.manual_seed(0)
-    return skorch.NeuralNetClassifier(
-        module=SimpleCNN,
-        module__input_dims=(28, 28),
-        module__output_dim=len(np.unique(y)),
-        module__n_chans=32,
-        module__hidden_dim=100,
-        module__dropout=0.5,
-        optimizer=torch.optim.Adam,
-        optimizer__lr=1e-3,
-        device=device,
-    )
-
-
-# Before training the model, we will compare timing on CPU and GPU. This will
-# also illustrate another aspect of the Dask API: direct submission of tasks
-# on the cluster.
-#
-# We first dispatch training data on the cluster using `client.scatter`, to save
-# some bandwidth later. Here `X_train_future` is a **future** object, no yet
-# computed.
-
-X_train_future = client.scatter(X_train.astype(np.float32))
-X_train_future
-
-# First, let's instantiate the CPU version of the model. `client.submit` send
-# the computation, here `model.fit`, on a worker of the cluster and returns a
-# future object. This is a non-blocking call. To wait and get the result, we can
-# use the `result` method of the future object.
-
-mlp_torch = build_model("cpu")
-
-# %%time
-mlp_torch_future = client.submit(mlp_torch.fit, X_train_future, y_train)
-mlp_torch = mlp_torch_future.result()
-
-# And now let's try the GPU version.
-
-mlp_torch = build_model("cuda")
-
-# %%time
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    mlp_torch_future = client.submit(mlp_torch.fit, X_train_future, y_train)
-    mlp_torch = mlp_torch_future.result()
+torch.manual_seed(0)
+cnn = skorch.NeuralNetClassifier(
+    module=SimpleCNN,
+    module__input_dims=(28, 28),
+    module__output_dim=len(np.unique(y)),
+    module__n_chans=32,
+    module__hidden_dim=100,
+    module__dropout=0.5,
+    optimizer=torch.optim.Adam,
+    optimizer__lr=1e-3,
+    device="cuda",
+)
 
 # Thanks to Skorch, our model is compatible with Scikit-learn API, and thus can
 # be used with Dask-ML meta-estimators. Hence we will use Hyberband to search
@@ -236,9 +204,7 @@ param_space = {
     "module__dropout": st.uniform(),
     "optimizer__lr": st.loguniform(1e-4, 1e-1),
 }
-mlp_torch = HyperbandSearchCV(
-    build_model("cuda"), param_space, max_iter=20, random_state=42
-)
+mlp_torch = HyperbandSearchCV(cnn, param_space, max_iter=20, random_state=42)
 
 # %%time
 with warnings.catch_warnings():

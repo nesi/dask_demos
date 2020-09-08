@@ -13242,8 +13242,8 @@ as train and test sets.</p>
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 26.9 s, sys: 25.7 s, total: 52.6 s
-Wall time: 13.2 s
+<pre>CPU times: user 25.5 s, sys: 24.7 s, total: 50.1 s
+Wall time: 12.6 s
 </pre>
 </div>
 </div>
@@ -13358,6 +13358,56 @@ for more information.</p>
 </div>
 
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">client</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[9]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<table style="border: 2px solid white;">
+<tr>
+<td style="vertical-align: top; border: 0px solid white">
+<h3 style="text-align: left;">Client</h3>
+<ul style="text-align: left; list-style: none; margin: 0; padding: 0;">
+  <li><b>Scheduler: </b>tcp://192.168.94.63:36938</li>
+  <li><b>Dashboard: </b><a href='http://192.168.94.63:8787/status' target='_blank'>http://192.168.94.63:8787/status</a></li>
+</ul>
+</td>
+<td style="vertical-align: top; border: 0px solid white">
+<h3 style="text-align: left;">Cluster</h3>
+<ul style="text-align: left; list-style:none; margin: 0; padding: 0;">
+  <li><b>Workers: </b>0</li>
+  <li><b>Cores: </b>0</li>
+  <li><b>Memory: </b>0 B</li>
+</ul>
+</td>
+</tr>
+</table>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -13368,7 +13418,7 @@ for more information.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cluster</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
@@ -13394,7 +13444,7 @@ HPC platform.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
@@ -13427,9 +13477,9 @@ HPC platform.</p>
 
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>[Parallel(n_jobs=-1)]: Using backend DaskDistributedBackend with 100 concurrent workers.
-[Parallel(n_jobs=-1)]: Done   4 out of  50 | elapsed:   24.1s remaining:  4.6min
-[Parallel(n_jobs=-1)]: Done  50 out of  50 | elapsed:  2.1min finished
+<pre>[Parallel(n_jobs=-1)]: Using backend DaskDistributedBackend with 55 concurrent workers.
+[Parallel(n_jobs=-1)]: Done  43 out of  50 | elapsed:  1.5min remaining:   14.7s
+[Parallel(n_jobs=-1)]: Done  50 out of  50 | elapsed:  2.0min finished
 </pre>
 </div>
 </div>
@@ -13440,8 +13490,8 @@ HPC platform.</p>
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 13 s, sys: 8.07 s, total: 21.1 s
-Wall time: 2min 9s
+<pre>CPU times: user 12.5 s, sys: 9.78 s, total: 22.2 s
+Wall time: 2min 5s
 </pre>
 </div>
 </div>
@@ -13460,7 +13510,7 @@ Wall time: 2min 9s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_pred_tuned</span> <span class="o">=</span> <span class="n">mlp_tuned</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
@@ -13493,7 +13543,7 @@ Wall time: 2min 9s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best hyper-parameters:</span><span class="se">\n</span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">mlp_tuned</span><span class="o">.</span><span class="n">best_params_</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -13542,7 +13592,7 @@ implements the <code>partial_fit</code> method.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">mlp_hyper</span> <span class="o">=</span> <span class="n">HyperbandSearchCV</span><span class="p">(</span>
@@ -13561,7 +13611,7 @@ implements the <code>partial_fit</code> method.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
@@ -13582,8 +13632,8 @@ implements the <code>partial_fit</code> method.</p>
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 6.25 s, sys: 717 ms, total: 6.97 s
-Wall time: 1min 3s
+<pre>CPU times: user 6.41 s, sys: 785 ms, total: 7.2 s
+Wall time: 1min 12s
 </pre>
 </div>
 </div>
@@ -13594,7 +13644,7 @@ Wall time: 1min 3s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_pred_hyper</span> <span class="o">=</span> <span class="n">mlp_hyper</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
@@ -13627,7 +13677,7 @@ Wall time: 1min 3s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best hyper-parameters:</span><span class="se">\n</span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">mlp_hyper</span><span class="o">.</span><span class="n">best_params_</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -13673,7 +13723,7 @@ current cluster.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cluster</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -13695,7 +13745,7 @@ current cluster.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cluster</span> <span class="o">=</span> <span class="n">SLURMCluster</span><span class="p">(</span>
@@ -13727,7 +13777,7 @@ least one worker and letting it spawning on the fly more if needed.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cluster</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">minimum</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">maximum</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
@@ -13751,186 +13801,24 @@ to make it in a Scikit-learn compatible estimator.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">build_model</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
-    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">skorch</span><span class="o">.</span><span class="n">NeuralNetClassifier</span><span class="p">(</span>
-        <span class="n">module</span><span class="o">=</span><span class="n">SimpleCNN</span><span class="p">,</span>
-        <span class="n">module__input_dims</span><span class="o">=</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">),</span>
-        <span class="n">module__output_dim</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">)),</span>
-        <span class="n">module__n_chans</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-        <span class="n">module__hidden_dim</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">module__dropout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-        <span class="n">optimizer</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
-        <span class="n">optimizer__lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
-        <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
-    <span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Before training the model, we will compare timing on CPU and GPU. This will
-also illustrate another aspect of the Dask API: direct submission of tasks
-on the cluster.</p>
-<p>We first dispatch training data on the cluster using <code>client.scatter</code>, to save
-some bandwidth later. Here <code>X_train_future</code> is a <strong>future</strong> object, no yet
-computed.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 <div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_train_future</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
-<span class="n">X_train_future</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">cnn</span> <span class="o">=</span> <span class="n">skorch</span><span class="o">.</span><span class="n">NeuralNetClassifier</span><span class="p">(</span>
+    <span class="n">module</span><span class="o">=</span><span class="n">SimpleCNN</span><span class="p">,</span>
+    <span class="n">module__input_dims</span><span class="o">=</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">),</span>
+    <span class="n">module__output_dim</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">)),</span>
+    <span class="n">module__n_chans</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">module__hidden_dim</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">module__dropout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
+    <span class="n">optimizer__lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
+    <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cuda&quot;</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[21]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<b>Future: ndarray</b> <font color="gray">status: </font><font color="black">finished</font>, <font color="gray">type: </font>numpy.ndarray, <font color="gray">key: </font>ndarray-9f1886153b6feaa3490197e81e27b353
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>First, let's instantiate the CPU version of the model. <code>client.submit</code> send
-the computation, here <code>model.fit</code>, on a worker of the cluster and returns a
-future object. This is a non-blocking call. To wait and get the result, we can
-use the <code>result</code> method of the future object.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mlp_torch</span> <span class="o">=</span> <span class="n">build_model</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
-<span class="n">mlp_torch_future</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">mlp_torch</span><span class="o">.</span><span class="n">fit</span><span class="p">,</span> <span class="n">X_train_future</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-<span class="n">mlp_torch</span> <span class="o">=</span> <span class="n">mlp_torch_future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 332 ms, sys: 67.9 ms, total: 400 ms
-Wall time: 26.9 s
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>And now let's try the GPU version.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mlp_torch</span> <span class="o">=</span> <span class="n">build_model</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
-<span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
-    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
-    <span class="n">mlp_torch_future</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">mlp_torch</span><span class="o">.</span><span class="n">fit</span><span class="p">,</span> <span class="n">X_train_future</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-    <span class="n">mlp_torch</span> <span class="o">=</span> <span class="n">mlp_torch_future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 155 ms, sys: 22.4 ms, total: 177 ms
-Wall time: 11.2 s
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -13947,7 +13835,7 @@ for the best hyper-parameters.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">param_space</span> <span class="o">=</span> <span class="p">{</span>
@@ -13956,9 +13844,7 @@ for the best hyper-parameters.</p>
     <span class="s2">&quot;module__dropout&quot;</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">uniform</span><span class="p">(),</span>
     <span class="s2">&quot;optimizer__lr&quot;</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">loguniform</span><span class="p">(</span><span class="mf">1e-4</span><span class="p">,</span> <span class="mf">1e-1</span><span class="p">),</span>
 <span class="p">}</span>
-<span class="n">mlp_torch</span> <span class="o">=</span> <span class="n">HyperbandSearchCV</span><span class="p">(</span>
-    <span class="n">build_model</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span><span class="p">),</span> <span class="n">param_space</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
-<span class="p">)</span>
+<span class="n">mlp_torch</span> <span class="o">=</span> <span class="n">HyperbandSearchCV</span><span class="p">(</span><span class="n">cnn</span><span class="p">,</span> <span class="n">param_space</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13968,7 +13854,7 @@ for the best hyper-parameters.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
@@ -13991,8 +13877,8 @@ for the best hyper-parameters.</p>
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 2.21 s, sys: 501 ms, total: 2.71 s
-Wall time: 1min 47s
+<pre>CPU times: user 2.47 s, sys: 563 ms, total: 3.03 s
+Wall time: 2min 24s
 </pre>
 </div>
 </div>
@@ -14003,7 +13889,7 @@ Wall time: 1min 47s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_pred_torch</span> <span class="o">=</span> <span class="n">mlp_torch</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
@@ -14025,7 +13911,7 @@ Wall time: 1min 47s
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CNN (PyTorch &amp; Hyperband) test accuracy is 97.66%.
+<pre>CNN (PyTorch &amp; Hyperband) test accuracy is 97.31%.
 </pre>
 </div>
 </div>
@@ -14036,7 +13922,7 @@ Wall time: 1min 47s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best hyper-parameters:</span><span class="se">\n</span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">mlp_torch</span><span class="o">.</span><span class="n">best_params_</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -14058,10 +13944,10 @@ Wall time: 1min 47s
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Best hyper-parameters:
 {
-    &#34;module__dropout&#34;: 0.45924889196586716,
-    &#34;module__hidden_dim&#34;: 166,
-    &#34;module__n_chans&#34;: 45,
-    &#34;optimizer__lr&#34;: 0.00026828750938254377
+    &#34;module__dropout&#34;: 0.17982235838824956,
+    &#34;module__hidden_dim&#34;: 74,
+    &#34;module__n_chans&#34;: 60,
+    &#34;optimizer__lr&#34;: 0.00609880295740103
 }
 </pre>
 </div>
