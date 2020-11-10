@@ -10,7 +10,7 @@ module load Miniconda3/4.8.2
 module load CUDA/10.2.89
 
 # activate conda environment
-source $EBROOTMINICONDA3/etc/profile.d/conda.sh
+source $(conda info --base)/etc/profile.d/conda.sh
 conda deactivate  # enforce base environment to be unloaded
 conda activate ##CONDA_VENV_PATH##
 

@@ -22,8 +22,6 @@ And install all dependencies in a virtual environment to cleanly isolate this
 project from others:
 ```
 cd hpc_for_datascience_demos
-module purge
-module load Miniconda3/4.8.2
 make venv_nesi
 ```
 The last command will create a virtual environment in the `venv` folder,

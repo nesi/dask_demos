@@ -1,3 +1,6 @@
+# ensure conda environment do not use user site-packages
+export PYTHONNOUSERSITE=1
+
 PYTHON_VERSION ?= 3.8
 CONDA_VENV_PATH ?= $(PWD)/venv
 KERNEL_NAME ?= $(shell basename $(CURDIR))
@@ -47,6 +50,7 @@ requirements.txt: venv/.canary
 # create a virtual environment and register it as a jupyter kernel
 venv/.canary: setup.cfg setup.py
 	conda create -y -p $(CONDA_VENV_PATH) python=$(PYTHON_VERSION)
+	echo "include-system-site-packages=false" >> $(CONDA_VENV_PATH)/pyvenv.cfg
 	$(CONDA_VENV) pip install -e .[dev]
 	$(CONDA_VENV) python -m ipykernel install --user --name $(KERNEL_NAME)
 	touch "$@"
@@ -56,10 +60,13 @@ venv: venv/.canary
 
 # remove the conda virtual environment
 clean_venv:
+	rm -rf $(KERNEL_DIR)
 	conda env remove -p $(CONDA_VENV_PATH)
+	rm -rf *.egg-info
 
 # use a wrapper script to load required modules before starting the kernel on NeSI
-venv_nesi: venv/.canary nesi/template_wrapper.bash nesi/template_kernel.json
+venv_nesi:
+	module purge && module load Miniconda3/4.8.2 && make venv
 	cp nesi/template_wrapper.bash $(KERNEL_DIR)/wrapper.bash
 	sed -i 's|##CONDA_VENV_PATH##|$(CONDA_VENV_PATH)|' $(KERNEL_DIR)/wrapper.bash
 	cp nesi/template_kernel.json $(KERNEL_DIR)/kernel.json
