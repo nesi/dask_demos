@@ -90,21 +90,20 @@ dask.config.set(
     }
 )
 cluster = SLURMCluster(
-    cores=10,
-    processes=2,
-    memory="8GiB",
-    walltime="0-00:30",
+    cores=4,
+    processes=1,
+    memory="4GiB",
+    walltime="0-00:10",
     log_directory="../dask/logs",  # folder for SLURM logs for each worker
     local_directory="../dask",  # folder for workers data
-    queue="bigmem",
 )
 client = Client(cluster)
 
 client
 
-# Spawn 20 workers and connect a client to be able use them.
+# Spawn 50 workers and connect a client to be able use them.
 
-cluster.scale(n=20)
+cluster.scale(n=30)
 client.wait_for_workers(1)
 
 # Scikit-learn uses [Joblib](https://joblib.readthedocs.io) to parallelize
@@ -162,7 +161,7 @@ cluster = SLURMCluster(
     cores=4,
     processes=1,
     memory="4GiB",
-    walltime="0-00:30",
+    walltime="0-00:10",
     log_directory="../dask/logs",
     local_directory="../dask",
     job_extra=["--gres gpu:1"],  # passed to job script to request a GPU
