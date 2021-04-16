@@ -35,6 +35,8 @@ Make sure to select the `hpc_for_datascience_demos` kernel when running any of
 the provided notebooks.
 
 - The [hyperparameters search (basic)](notebooks/hyperparameters_search_basic.ipynb)
+  [[html version](https://nesi.github.io/hpc_for_datascience_demos/notebooks/hyperparameters_search_basic.html)]
   notebook shows how to adapt a Scikit-Learn grid search to run in parallel on HPC.
 - The [hyperparameters search (NZ RSE 2020)](notebooks/hyperparameters_search_nzrse.ipynb)
+  [[html version](https://nesi.github.io/hpc_for_datascience_demos/notebooks/hyperparameters_search_nzrse.html)]
   notebook corresponds to the demo presented at [NZ RSE conference 2020](https://www.rseconference.nz/).
