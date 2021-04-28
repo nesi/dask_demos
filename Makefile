@@ -38,13 +38,13 @@ venv/.canary:
 
 # install and freeze dependencies in the virtual environment for reproducibility
 requirements.txt: setup.cfg | venv/.canary
-	$(CONDA_VENV) pip install -e .[dev]
+	$(CONDA_VENV) pip install -e .[dev] -f https://download.pytorch.org/whl/torch_stable.html
 	$(CONDA_VENV) pip freeze > "$@"
 	sed -i 's/-e git.*/-e .[dev]/' requirements.txt
 
 ## Create a Conda virtual environment and register it as a Jupyter kernel
 venv: requirements.txt venv/.canary
-	$(CONDA_VENV) pip install -r "$<"
+	$(CONDA_VENV) pip install -r "$<" -f https://download.pytorch.org/whl/torch_stable.html
 	$(CONDA_VENV) python -m ipykernel install --user --name $(KERNEL_NAME)
 
 ## Create a Conda virtual environment for Jupyter on NeSI
