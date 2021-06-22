@@ -7,7 +7,6 @@
 module purge
 module load slurm
 module load Miniconda3/4.8.2
-module load CUDA/10.2.89
 
 # activate conda environment
 source $(conda info --base)/etc/profile.d/conda.sh
