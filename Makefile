@@ -63,12 +63,12 @@ clean_venv:
 
 ## Format Python scripts and notebooks
 format:
-	$(CONDA_VENV) black src notebooks
+	$(CONDA_VENV) black --exclude .ipynb_checkpoints src
 	$(CONDA_VENV) jupytext --pipe black notebooks/*.ipynb
 
 ## Lint Python scripts and notebooks
 lint:
-	$(CONDA_VENV) flake8 src
+	$(CONDA_VENV) flake8 --exclude .ipynb_checkpoints src
 	$(CONDA_VENV) jupytext --check flake8 notebooks/*.ipynb
 
 # convert a notebook into a .html document after running it
