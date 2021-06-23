@@ -14425,8 +14425,8 @@ as train and test sets.</p>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>CPU times: user 24.4 s, sys: 19.7 s, total: 44.1 s
-Wall time: 11.1 s
+<pre>CPU times: user 24.8 s, sys: 21.5 s, total: 46.3 s
+Wall time: 11.6 s
 </pre>
 </div>
 </div>
@@ -14574,8 +14574,8 @@ for more information.</p>
 <td style="vertical-align: top; border: 0px solid white">
 <h3 style="text-align: left;">Client</h3>
 <ul style="text-align: left; list-style: none; margin: 0; padding: 0;">
-  <li><b>Scheduler: </b>tcp://192.168.94.148:42977</li>
-  <li><b>Dashboard: </b><a href='http://192.168.94.148:8787/status' target='_blank'>http://192.168.94.148:8787/status</a></li>
+  <li><b>Scheduler: </b>tcp://192.168.94.149:43619</li>
+  <li><b>Dashboard: </b><a href='http://192.168.94.149:8787/status' target='_blank'>http://192.168.94.149:8787/status</a></li>
 </ul>
 </td>
 <td style="vertical-align: top; border: 0px solid white">
@@ -14599,7 +14599,7 @@ for more information.</p>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Spawn 50 workers and connect a client to be able use them.</p>
+<p>Spawn 10 workers and connect a client to be able use them.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -14608,7 +14608,7 @@ for more information.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cluster</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cluster</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="n">client</span><span class="o">.</span><span class="n">wait_for_workers</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
@@ -14656,8 +14656,8 @@ HPC platform.</p>
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>Fitting 5 folds for each of 10 candidates, totalling 50 fits
-CPU times: user 13.4 s, sys: 7.27 s, total: 20.7 s
-Wall time: 1min 43s
+CPU times: user 14.6 s, sys: 7.94 s, total: 22.5 s
+Wall time: 2min 36s
 </pre>
 </div>
 </div>
@@ -14807,8 +14807,8 @@ implements the <code>partial_fit</code> method.</p>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>CPU times: user 8.46 s, sys: 801 ms, total: 9.26 s
-Wall time: 50.9 s
+<pre>CPU times: user 10.8 s, sys: 783 ms, total: 11.6 s
+Wall time: 1min 13s
 </pre>
 </div>
 </div>
@@ -14932,12 +14932,12 @@ current cluster.</p>
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cluster</span> <span class="o">=</span> <span class="n">SLURMCluster</span><span class="p">(</span>
     <span class="n">cores</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
     <span class="n">processes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">memory</span><span class="o">=</span><span class="s2">&quot;4GiB&quot;</span><span class="p">,</span>
+    <span class="n">memory</span><span class="o">=</span><span class="s2">&quot;6GiB&quot;</span><span class="p">,</span>
     <span class="n">walltime</span><span class="o">=</span><span class="s2">&quot;0-00:10&quot;</span><span class="p">,</span>
     <span class="n">log_directory</span><span class="o">=</span><span class="s2">&quot;../dask/logs&quot;</span><span class="p">,</span>
     <span class="n">local_directory</span><span class="o">=</span><span class="s2">&quot;../dask&quot;</span><span class="p">,</span>
-    <span class="n">job_extra</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;--gres gpu:1&quot;</span><span class="p">],</span>  <span class="c1"># passed to job script to request a GPU</span>
-    <span class="n">queue</span><span class="o">=</span><span class="s2">&quot;gpu&quot;</span><span class="p">,</span>  <span class="c1"># use the GPU partition</span>
+    <span class="n">job_extra</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;--gpus-per-node 1&quot;</span><span class="p">],</span>  <span class="c1"># &quot;--gpus-per-node A100:1&quot; to use A100 GPU</span>
+    <span class="n">env_extra</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;module load cuDNN/8.0.2.39-CUDA-11.0.2&quot;</span><span class="p">],</span>  <span class="c1"># run before worker start</span>
 <span class="p">)</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
 </pre></div>
@@ -14960,7 +14960,7 @@ least one worker and letting it spawning on the fly more if needed.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[20]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cluster</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">minimum</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">maximum</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cluster</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">minimum</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">maximum</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
 <span class="n">client</span><span class="o">.</span><span class="n">wait_for_workers</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
@@ -15059,8 +15059,8 @@ for the best hyper-parameters.</p>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>CPU times: user 3.83 s, sys: 703 ms, total: 4.53 s
-Wall time: 1min 19s
+<pre>CPU times: user 6.83 s, sys: 1.32 s, total: 8.15 s
+Wall time: 2min 36s
 </pre>
 </div>
 </div>
@@ -15097,7 +15097,7 @@ Wall time: 1min 19s
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>CNN (PyTorch &amp; Hyperband) test accuracy is 97.61%.
+<pre>CNN (PyTorch &amp; Hyperband) test accuracy is 98.04%.
 </pre>
 </div>
 </div>
@@ -15134,10 +15134,10 @@ Wall time: 1min 19s
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>Best hyper-parameters:
 {
-    &#34;module__dropout&#34;: 0.45924889196586716,
-    &#34;module__hidden_dim&#34;: 166,
-    &#34;module__n_chans&#34;: 45,
-    &#34;optimizer__lr&#34;: 0.00026828750938254377
+    &#34;module__dropout&#34;: 0.3585392195120233,
+    &#34;module__hidden_dim&#34;: 129,
+    &#34;module__n_chans&#34;: 63,
+    &#34;optimizer__lr&#34;: 0.0028285890382133885
 }
 </pre>
 </div>

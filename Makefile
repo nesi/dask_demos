@@ -73,8 +73,7 @@ lint:
 
 # convert a notebook into a .html document after running it
 %.html: %.ipynb
-	$(CONDA_VENV) jupyter nbconvert --to html --execute "$<" --output="$(@F)" \
-	    --ExecutePreprocessor.kernel_name=$(KERNEL_NAME)
+	$(CONDA_VENV) jupyter nbconvert --to html "$<" --output="$(@F)"
 
 ## Convert notebooks into .html pages after running them
 html: $(HTML_FILES)
