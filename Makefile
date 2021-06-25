@@ -71,11 +71,11 @@ lint:
 	$(CONDA_VENV) flake8 --exclude .ipynb_checkpoints src
 	$(CONDA_VENV) jupytext --check flake8 notebooks/*.ipynb
 
-# convert a notebook into a .html document after running it
+# convert a notebook into a .html document
 %.html: %.ipynb
 	$(CONDA_VENV) jupyter nbconvert --to html "$<" --output="$(@F)"
 
-## Convert notebooks into .html pages after running them
+## Convert notebooks into .html pages
 html: $(HTML_FILES)
 
 .PHONY: help venv venv_nesi clean_venv format lint html
