@@ -38,15 +38,17 @@ if __name__ == "__main__":
         local_directory="dask",
     )
 
-    url = urlparse(cluster.dashboard_link)
-    hostname = os.environ["HOSTNAME"]
-    print(
-        "dashboard link: https://jupyter.nesi.org.nz/user-redirect/proxy/"
-        f"{hostname}.ib.hpcf.nesi.org.nz:{url.port}{url.path}",
-        flush=True,
-    )
+    with cluster:
+        client = Client(cluster)
 
-    with cluster, Client(cluster) as client:
+        url = urlparse(client.dashboard_link)
+        hostname = os.environ["HOSTNAME"]
+        print(
+            "dashboard link: https://jupyter.nesi.org.nz/user-redirect/proxy/"
+            f"{hostname}.ib.hpcf.nesi.org.nz:{url.port}{url.path}",
+            flush=True,
+        )
+
         with joblib.parallel_backend("dask", wait_for_workers_timeout=600):
             start = time.perf_counter()
             mlp_tuned.fit(X_train, y_train)
