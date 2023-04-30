@@ -1,7 +1,6 @@
 # HPC for Data Science - Demos
 
-This repository contains various notebooks to demonstrate how to run data science
-related tasks on NeSI's HPC platform.
+This repository contains various notebooks to demonstrate how to run data science related tasks on NeSI's HPC platform.
 
 
 ## Installation
@@ -56,5 +55,5 @@ jupyter-kernelspec remove hpc_for_datascience_demos
 Make sure to select the `hpc_for_datascience_demos` kernel when running any of the provided notebooks.
 
 - The [dask basics](notebooks/dask_basics.ipynb) notebook is used to introduce Dask.
-- The [hyperparameters search (basic)](notebooks/hyperparameters_search_basic.ipynb) notebook shows how to adapt a Scikit-Learn grid search to run in parallel on HPC.
+- The [hyperparameters search](notebooks/hyperparameters_search.ipynb) notebook shows how to adapt a Scikit-Learn grid search to run in parallel on HPC.
 - The [hyperparameters search (NZ RSE 2020)](notebooks/hyperparameters_search_nzrse.ipynb) notebook corresponds to the demo presented at [NZ RSE conference 2020](https://www.rseconference.nz/).
