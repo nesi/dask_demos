@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import os
 import time
 from urllib.parse import urlparse
@@ -32,8 +30,8 @@ if __name__ == "__main__":
 
     n_cpus = int(os.environ.get("SLURM_CPUS_PER_TASK", 1))
     cluster = LocalCluster(
-        n_workers=max(n_cpus // 2, 1),
-        threads_per_worker=2,
+        n_workers=max(n_cpus // 4, 1),
+        threads_per_worker=4,
         memory_limit="1GB",
         local_directory="dask",
     )
@@ -44,8 +42,8 @@ if __name__ == "__main__":
         url = urlparse(client.dashboard_link)
         hostname = os.environ["HOSTNAME"]
         print(
-            "dashboard link: https://jupyter.nesi.org.nz/user-redirect/proxy/"
-            f"{hostname}.ib.hpcf.nesi.org.nz:{url.port}{url.path}",
+            "### dashboard link: https://jupyter.nesi.org.nz/user-redirect/proxy/"
+            f"{hostname}.ib.hpcf.nesi.org.nz:{url.port}{url.path} ###",
             flush=True,
         )
 

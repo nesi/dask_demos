@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
 #SBATCH --account=nesi99999
-#SBATCH --partition=milan
 #SBATCH --time=00-00:10:00
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=80
-#SBATCH --mem=80GB
 #SBATCH --output logs/%j-%x.out
 #SBATCH --error logs/%j-%x.out
+#SBATCH --partition=milan --ntasks=2 --mem-per-cpu=1G --cpus-per-task=1
+#SBATCH hetjob
+#SBATCH --partition=milan --ntasks=20 --mem-per-cpu=1G --cpus-per-task=4
 
 # load environment modules and activate conda environment
-module purge && module load Miniconda3/22.11.1-1
+module purge && module load Miniconda3/22.11.1-1 impi/2021.5.1-GCC-11.3.0
 source $(conda info --base)/etc/profile.d/conda.sh
 export PYTHONNOUSERSITE=1
 
@@ -23,4 +22,4 @@ export DASK_DISTRIBUTED__WORKER__MEMORY__PAUSE=0.80
 export DASK_DISTRIBUTED__WORKER__MEMORY__TERMINATE=0.95
 
 # run Python script
-python scripts/hyperparameters_search.py
+srun --het-group=0-1 python scripts/hyperparameters_search_mpi.py
