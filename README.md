@@ -40,7 +40,9 @@ nesi-add-kernel -p ./venv -- dask_demos CUDA/11.6.2
 *Note: The `environment.lock.yml` file has been generated from a conda environment created with the `environment.yml` file and then exported with*
 
 ```
-conda env export -p ./venv --no-builds | sed '/^name: .*/d; /^prefix: .*/d' > environment.lock.yml
+conda env export -p ./venv --no-builds | \
+    sed '/^name: .*/d; /^prefix: .*/d; s/python-graphviz/graphviz/' \
+    > environment.lock.yml
 ```
 
 *Note: You can later remove the jupyter kernel using*
