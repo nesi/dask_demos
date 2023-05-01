@@ -1,6 +1,6 @@
 import os
 import time
-from urllib.parse import urlparse
+import socket
 
 import numpy as np
 from sklearn.datasets import fetch_openml
@@ -39,11 +39,11 @@ if __name__ == "__main__":
     with cluster:
         client = Client(cluster)
 
-        url = urlparse(client.dashboard_link)
-        hostname = os.environ["HOSTNAME"]
+        host = client.run_on_scheduler(socket.gethostname)
+        port = client.scheduler_info()["services"]["dashboard"]
         print(
             "### dashboard link: https://jupyter.nesi.org.nz/user-redirect/proxy/"
-            f"{hostname}.ib.hpcf.nesi.org.nz:{url.port}{url.path} ###",
+            f"{host}.ib.hpcf.nesi.org.nz:{port}/status ###",
             flush=True,
         )
 
