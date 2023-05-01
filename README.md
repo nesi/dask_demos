@@ -1,6 +1,6 @@
 # Dask Demos
 
-This repository contains to demos to show how to run [Dask](https://www.dask.org/) on NeSI's HPC platform.
+This repository contains demos of [Dask](https://www.dask.org/) running on NeSI's HPC platform.
 
 
 ## Installation
