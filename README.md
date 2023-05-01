@@ -6,6 +6,7 @@ This repository contains demos of [Dask](https://www.dask.org/) running on NeSI'
 ## Installation
 
 These demos are meant to be run via [Jupyter on NeSI](https://support.nesi.org.nz/hc/en-gb/articles/360001555615-Jupyter-on-NeSI).
+
 First, make sure to first log in https://jupyter.nesi.org.nz.
 
 Once you are connected to a JupyterLab instance, open a new terminal, via the
