@@ -1,5 +1,5 @@
 import time
-from urllib.parse import urlparse
+import socket
 
 import numpy as np
 from sklearn.datasets import fetch_openml
@@ -12,7 +12,7 @@ import dask_mpi as dm
 from dask.distributed import Client
 
 if __name__ == "__main__":
-    dm.initialize(local_directory="dask")
+    dm.initialize(nthreads=4, memory_limit="1GB", local_directory="dask")
 
     X, y = fetch_openml(
         "mnist_784", version=1, return_X_y=True, parser="pandas", as_frame=False
@@ -31,10 +31,12 @@ if __name__ == "__main__":
     mlp_tuned = GridSearchCV(MLPClassifier(), param_grid, verbose=1)
 
     client = Client()
-    url = urlparse(client.dashboard_link)
+
+    host = client.run_on_scheduler(socket.gethostname)
+    port = client.scheduler_info()["services"]["dashboard"]
     print(
         "### dashboard link: https://jupyter.nesi.org.nz/user-redirect/proxy/"
-        f"{url.hostname}:{url.port}{url.path} ###",
+        f"{host}.ib.hpcf.nesi.org.nz:{port}/status ###",
         flush=True,
     )
 
