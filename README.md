@@ -28,12 +28,6 @@ export PYTHONNOUSERSITE=1
 conda env create --solver=libmamba -f environment.lock.yml -p ./venv
 ```
 
-*Note: The `environment.lock.yml` file has been generated from a conda environment created with the `environment.yml` file and then exported with*
-
-```
-conda env export -p ./venv --no-builds | sed '/^name: .*/d; /^prefix: .*/d' > environment.lock.yml
-```
-
 The last command will create a conda environment in the `venv` folder.
 Register it as a new jupyter kernel named `dask_demos` and ensure that
 it uses the right [environment modules](https://support.nesi.org.nz/hc/en-gb/articles/360001113076-The-HPC-environment-) using the `nesi-add-kernel` tool (more information in our [dedicated support page](https://support.nesi.org.nz/hc/en-gb/articles/4414958674831-Jupyter-kernels-Tool-assisted-management)).
@@ -43,7 +37,13 @@ module purge && module load JupyterLab
 nesi-add-kernel -p ./venv -- dask_demos CUDA/11.6.2
 ```
 
-*Note: You can later remove this jupyter kernel using*
+*Note: The `environment.lock.yml` file has been generated from a conda environment created with the `environment.yml` file and then exported with*
+
+```
+conda env export -p ./venv --no-builds | sed '/^name: .*/d; /^prefix: .*/d' > environment.lock.yml
+```
+
+*Note: You can later remove the jupyter kernel using*
 
 ```
 module purge && module load JupyterLab
