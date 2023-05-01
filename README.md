@@ -24,7 +24,7 @@ cd hpc_for_datascience_demos
 module purge && module load Miniconda3/22.11.1-1
 source $(conda info --base)/etc/profile.d/conda.sh
 export PYTHONNOUSERSITE=1
-conda env create -f environment.lock.yml -p ./venv
+conda env create --solver=libmamba -f environment.lock.yml -p ./venv
 ```
 
 *Note: The `environment.lock.yml` file has been generated from a conda environment created with the `environment.yml` file and then exported with*
