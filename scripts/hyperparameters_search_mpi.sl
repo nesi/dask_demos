@@ -3,9 +3,9 @@
 #SBATCH --time=00-00:10:00
 #SBATCH --output logs/%j-%x.out
 #SBATCH --error logs/%j-%x.out
-#SBATCH --partition=milan --ntasks=2 --mem-per-cpu=1G --cpus-per-task=1
+#SBATCH --ntasks=2 --mem-per-cpu=1G --cpus-per-task=1
 #SBATCH hetjob
-#SBATCH --partition=milan --ntasks=20 --mem-per-cpu=1G --cpus-per-task=4
+#SBATCH --ntasks=20 --mem-per-cpu=1G --cpus-per-task=4
 
 # load environment modules and activate conda environment
 module purge && module load Miniconda3/22.11.1-1 impi/2021.5.1-GCC-11.3.0
