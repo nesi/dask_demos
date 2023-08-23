@@ -24,4 +24,8 @@ dependencies:
     - graphviz
     - torch
     - skorch
+    - xarray
+    - netCDF4
+    - h5netcdf
+    - requests
     - --extra-index-url https://download.pytorch.org/whl/cu116
