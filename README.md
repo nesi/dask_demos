@@ -21,7 +21,7 @@ git clone https://github.com/nesi/dask_demos
 And install all dependencies in a conda environment to cleanly isolate this project from others:
 
 ```
-cd hpc_for_datascience_demos
+cd dask_demos
 module purge && module load Miniconda3/22.11.1-1
 source $(conda info --base)/etc/profile.d/conda.sh
 export PYTHONNOUSERSITE=1
