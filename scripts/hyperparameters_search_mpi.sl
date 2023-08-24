@@ -2,7 +2,7 @@
 #SBATCH --account=nesi99999
 #SBATCH --time=00-00:10:00
 #SBATCH --output logs/%j-%x.out
-#SBATCH --error logs/%j-%x.out
+#SBATCH --error logs/%j-%x.err
 #SBATCH --ntasks=2 --mem-per-cpu=1G --cpus-per-task=1
 #SBATCH hetjob
 #SBATCH --ntasks=20 --mem-per-cpu=1G --cpus-per-task=4
@@ -20,6 +20,8 @@ export DASK_DISTRIBUTED__WORKER__MEMORY__TARGET=False
 export DASK_DISTRIBUTED__WORKER__MEMORY__SPILL=False
 export DASK_DISTRIBUTED__WORKER__MEMORY__PAUSE=0.80
 export DASK_DISTRIBUTED__WORKER__MEMORY__TERMINATE=0.95
+
+export TMPDIR=/nesi/nobackup/nesi99999/riom/tmpdir
 
 # run Python script
 srun --het-group=0-1 python scripts/hyperparameters_search_mpi.py
