@@ -39,7 +39,7 @@ if __name__ == "__main__":
     # disabled (see Dask configuration in the job submission script).
 
     cluster = SLURMCluster(
-        memory="1GB",  # memory for Slurm job, not per worker
+        memory="2GB",  # memory for Slurm job, not per worker
         cores=8,  # cores for Slurm job, not per worker
         processes=2,  # number of Dask worker per Slurm job
         walltime="0-00:20:00",  # make it long enough to outlive main process
@@ -48,8 +48,9 @@ if __name__ == "__main__":
         queue="milan",  # not needed unless targeting a specific partition
         log_directory="dask/logs",  # worker Slurm jobs logs folder
         local_directory=None,  # see comment above ;-)
-        worker_extra_args=["--memory-limit 1GB"],  # danger zone: oversubscribe memory
+        # worker_extra_args=["--memory-limit 2GB"],  # danger zone: oversubscribe memory
         # TODO show how to load a module?
+        # TODO show how handle timelimit with --lifetime and --lifetime-stagger
     )
     with cluster, Client(cluster) as client:
         cluster.scale(jobs=10)
